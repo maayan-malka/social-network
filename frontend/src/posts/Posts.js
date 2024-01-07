@@ -15,6 +15,7 @@ function Posts() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [end, setEnd] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -26,6 +27,9 @@ function Posts() {
             dispatch(incrementPage());
             const response = await postsService.fetchData(page + 1);
             dispatch(setData(response["posts"]));
+            if (!response["posts"].length) {
+                setEnd(true);
+            }
         } catch (error) {
             setError(error);
         } finally {
@@ -37,19 +41,21 @@ function Posts() {
     window.onscroll = debounce(() => {
         if (window.innerHeight + document.documentElement.scrollTop > document.documentElement.offsetHeight
             || document.documentElement.offsetHeight - (window.innerHeight + document.documentElement.scrollTop) < 150) {
-            fetchData();
+            if (!end) {
+                fetchData();
+            }
         }
     }, 100);
 
     return (
         <Box sx={{}}>
             <h1>The posts</h1>
-            <Box sx={{mb: 3}}>
+            <Box sx={{ mb: 3 }}>
                 {posts && posts.map((post) => (
                     <PostDetails key={post._id} postDetails={post}></PostDetails>
                 ))}
             </Box>
-            {!isLoading && <CircularProgress sx={{margin: 'auto'}}/>}
+            {!isLoading && <CircularProgress sx={{ margin: 'auto' }} />}
             {error && <span className='red-color'>An error occurred while retrieving the posts</span>}
         </Box>
     );

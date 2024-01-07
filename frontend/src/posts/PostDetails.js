@@ -15,7 +15,7 @@ function PostDetails(props) {
             <Box sx={{ justifyContent: 'space-between', display: 'flex' }}>
                 <Box sx={{ flexDirection: 'row', display: 'flex' }}>
                     {postDetails.tags.map((tag) =>
-                        <Box className="tag-box">#{tag}</Box>
+                        <Box className="tag-box" key={tag}>#{tag}</Box>
                     )}
                 </Box>
                 <Box>

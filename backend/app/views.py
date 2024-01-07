@@ -12,9 +12,11 @@ NUM_POSTS = 10
 def get_posts(request):
     page = int(request.GET.get("page", 1))
 
+    start_index = (page - 1) * NUM_POSTS
+    end_index = (page * NUM_POSTS) - 1
+
     with open('posts.json') as f:
         all_posts = json.load(f)
         sorted_posts = sorted(all_posts, key=itemgetter('content'))
-        relevant_posts = sorted_posts[(page - 1) * NUM_POSTS: (page * NUM_POSTS) - 1]
-
+        relevant_posts = sorted_posts[start_index: end_index]
     return Response({"posts": relevant_posts, "page": page})
