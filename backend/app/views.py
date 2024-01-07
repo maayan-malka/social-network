@@ -1,5 +1,4 @@
 import json
-import time
 from operator import itemgetter
 
 from rest_framework.decorators import api_view
@@ -19,4 +18,5 @@ def get_posts(request):
         all_posts = json.load(f)
         sorted_posts = sorted(all_posts, key=itemgetter('content'))
         relevant_posts = sorted_posts[start_index: end_index]
+    
     return Response({"posts": relevant_posts, "page": page})
